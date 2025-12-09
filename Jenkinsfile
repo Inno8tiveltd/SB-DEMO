@@ -44,30 +44,34 @@ pipeline {
         }
 
         stage("Jar Publish") {
-            steps {
-                script {
-                    echo '<--------------- Jar Publish Started --------------->'
+    steps {
+        script {
 
-                    def server = Artifactory.newServer(
-                        url: "${REGISTRY}/artifactory",
-                        credentialsId: "jfrog"
-                    )
+            echo '<--------------- Checking target folder --------------->'
+            sh 'ls -l target'     // <--- ADD THIS LINE
 
-                    def uploadSpec = """{
-                        "files": [
-                            {
-                                "pattern": "target/*.jar",
-                                "target": "spring-boot-libs-snapshots-local/",
-                                "flat": true
-                            }
-                        ]
-                    }"""
+            echo '<--------------- Jar Publish Started --------------->'
 
-                    server.upload(uploadSpec)
+            def server = Artifactory.newServer(
+                url: "${REGISTRY}/artifactory",
+                credentialsId: "jfrog"
+            )
 
-                    echo '<--------------- Jar Publish Ended --------------->'
-                }
-            }
+            def uploadSpec = """{
+                "files": [
+                    {
+                        "pattern": "target/*.jar",
+                        "target": "spring-boot-libs-snapshots-local/",
+                        "flat": true
+                    }
+                ]
+            }"""
+
+            artifactoryUpload server: server, spec: uploadSpec
+
+            echo '<--------------- Jar Publish Ended --------------->'
         }
+    }
+}
     }
 }
