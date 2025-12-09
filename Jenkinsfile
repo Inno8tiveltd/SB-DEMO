@@ -3,12 +3,10 @@ pipeline {
 
     tools {
         maven 'maven3'
-        jdk 'jdk17'
+
     }
 
-    environment {
-        SONARQUBE = credentials('sonar-creds') // optional only if using token
-    }
+    
 
     stages {
 
