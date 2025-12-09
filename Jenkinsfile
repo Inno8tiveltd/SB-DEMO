@@ -46,7 +46,6 @@ pipeline {
         stage("Jar Publish") {
             steps {
                 script {
-
                     echo '<--------------- Jar Publish Started --------------->'
 
                     def server = Artifactory.newServer(
@@ -54,21 +53,17 @@ pipeline {
                         credentialsId: "jfrog"
                     )
 
-                    def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}"
-
                     def uploadSpec = """{
                         "files": [
                             {
                                 "pattern": "target/*.jar",
-                                "target": "libs-snapshot-local/",
-                                "flat": true,
-                                "props" : "${properties}"
+                                "target": "spring-boot-libs-snapshots-local/",
+                                "flat": true
                             }
                         ]
                     }"""
 
-                    def buildInfo = server.upload(uploadSpec)
-                    server.publishBuildInfo(buildInfo)
+                    server.upload(uploadSpec)
 
                     echo '<--------------- Jar Publish Ended --------------->'
                 }
