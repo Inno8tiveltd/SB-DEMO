@@ -1,26 +1,38 @@
 pipeline {
-    agent {
-        node{
-            label 'maven'
-        }
-    }
-     tools {
+    agent any
+
+    tools {
         maven 'maven3'
-        SonarQube Scanner 'sonarscanner'
+        jdk 'jdk17'
+    }
+
+    environment {
+        SONARQUBE = credentials('sonar-creds') // optional only if using token
     }
 
     stages {
-        stage('build') {
+
+        stage('Build') {
             steps {
                 sh 'mvn clean install'
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube-Server') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=sonar00732_spring-boot-application -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+                script {
+                    withSonarQubeEnv('sonarqube') {
+                        sh """
+                            sonar-scanner \
+                              -Dsonar.projectKey=SB-DEMO \
+                              -Dsonar.projectName=SB-DEMO \
+                              -Dsonar.sources=src \
+                              -Dsonar.java.binaries=target
+                        """
+                    }
                 }
             }
         }
+
     }
 }
