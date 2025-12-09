@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven3'
-        
+
     }
 
     stages {
@@ -15,19 +15,21 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                script {
-                    withSonarQubeEnv('sonarqube-server') {
-                        sh """
-                            sonar-scanner \
-                              -Dsonar.projectKey=SB-DEMO \
-                              -Dsonar.projectName=SB-DEMO \
-                              -Dsonar.sources=src \
-                              -Dsonar.java.binaries=target
-                        """
-                    }
-                }
+    steps {
+        withSonarQubeEnv('sonarqube-server') {
+            script {
+                def scannerHome = tool 'sonarscanner'
+                sh """
+                    ${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=SB-DEMO \
+                    -Dsonar.projectName=SB-DEMO \
+                    -Dsonar.sources=src \
+                    -Dsonar.java.binaries=target
+                """
             }
         }
+    }
+}
+
     }
 }
