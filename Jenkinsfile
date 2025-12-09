@@ -6,7 +6,7 @@ pipeline {
     }
      tools {
         maven 'maven3'
-        sonarQube 'SonarQube-Server'
+        SonarQube Scanner 'sonarscanner'
     }
 
     stages {
