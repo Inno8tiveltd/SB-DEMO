@@ -4,6 +4,9 @@ pipeline {
             label 'maven'
         }
     }
+     tools {
+        maven 'maven3'
+    }
 
     stages {
         stage('build') {
