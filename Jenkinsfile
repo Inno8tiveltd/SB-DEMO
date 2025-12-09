@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven3'
-        sonarRunner 'sonarscanner'   // MUST match Jenkins tool name
+        SonarRunnerInstallation 'sonarscanner'
     }
 
     stages {
@@ -29,6 +29,5 @@ pipeline {
                 }
             }
         }
-
     }
 }
