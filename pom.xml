@@ -14,7 +14,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>spring-boot-2-hello-world</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <!-- Name and description should be here -->
