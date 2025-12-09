@@ -3,11 +3,8 @@ pipeline {
 
     tools {
         maven 'maven3'
-        sonarScanner 'sonarscanner'
-
+        sonarScanner 'sonarscanner'    // <<< MUST MATCH JENKINS TOOL NAME
     }
-
-    
 
     stages {
 
@@ -20,7 +17,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('sonarqube-server') {
+                    withSonarQubeEnv('sonarqube-server') {   // <<< MUST MATCH SONARQUBE SERVER NAME
                         sh """
                             sonar-scanner \
                               -Dsonar.projectKey=SB-DEMO \
@@ -32,6 +29,5 @@ pipeline {
                 }
             }
         }
-
     }
 }
