@@ -56,12 +56,11 @@ pipeline {
 
                     def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}"
 
-                    // Upload the JAR created by Maven
                     def uploadSpec = """{
                         "files": [
                             {
                                 "pattern": "target/*.jar",
-                                "target": "libs-release-local/",
+                                "target": "libs-snapshot-local/",
                                 "flat": true,
                                 "props" : "${properties}"
                             }
