@@ -19,7 +19,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('sonarscanner') {
+                    withSonarQubeEnv('sonarqube-server) {
                         sh """
                             sonar-scanner \
                               -Dsonar.projectKey=SB-DEMO \
