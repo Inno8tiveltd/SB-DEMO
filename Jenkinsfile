@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven3'
-        SonarRunnerInstallation 'sonarscanner'
+        
     }
 
     stages {
