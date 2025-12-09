@@ -10,10 +10,17 @@ pipeline {
 
         stage('Build') {
             steps {
+                echo 'Building the Project'
                 sh 'mvn clean install'
             }
         }
-
+        stage('Test') {
+            steps {
+                echo 'Running Unit Tests'
+                sh 'mvn surefire-report:report'
+                echo 'Unit Tests Completed'
+            }
+        }
         stage('SonarQube Analysis') {
     steps {
         withSonarQubeEnv('sonarqube-server') {
