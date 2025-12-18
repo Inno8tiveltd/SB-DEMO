@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         REGISTRY = "trialdshkbv.jfrog.io"
-        DOCKER_REPO = "docker-local"
+        DOCKER_REPO = "docker-sb-docker-local"
         IMAGE_NAME = "sb-demo"
         IMAGE_TAG = "1.0"
     }
