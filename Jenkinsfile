@@ -15,6 +15,7 @@ pipeline {
             steps {
                 echo 'Building the Project'
                 sh 'mvn clean install -DskipTests=true'
+                sh 'mvn package'
             }
         }
 
