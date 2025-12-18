@@ -16,6 +16,8 @@ pipeline {
                 echo 'Building the Project'
                 sh 'mvn clean install -DskipTests=true'
                 sh 'mvn package'
+                sh 'mkdir stagingjar'
+                sh 'cp target/*.jar stagingjar/'
             }
         }
 
