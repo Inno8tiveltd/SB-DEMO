@@ -6,7 +6,10 @@ pipeline {
     }
 
     environment {
-        REGISTRY = "https://trialdshkbv.jfrog.io"
+        REGISTRY = "trialdshkbv.jfrog.io"
+        DOCKER_REPO = "docker-local"
+        IMAGE_NAME = "sb-demo"
+        IMAGE_TAG = "1.0"
     }
 
     stages {
@@ -16,7 +19,7 @@ pipeline {
                 echo 'Building the Project'
                 sh 'mvn clean install -DskipTests=true'
                 sh 'mvn package'
-                sh 'mkdir stagingjar'
+                sh 'mkdir -p stagingjar'
                 sh 'cp target/*.jar stagingjar/'
             }
         }
@@ -49,14 +52,11 @@ pipeline {
         stage('Jar Publish') {
             steps {
                 script {
-
                     echo '<--------------- Checking target folder --------------->'
                     sh 'ls -l target'
 
-                    echo '<--------------- Jar Publish Started --------------->'
-
                     def server = Artifactory.newServer(
-                        url: "${REGISTRY}/artifactory",
+                        url: "https://${REGISTRY}/artifactory",
                         credentialsId: "jfrog"
                     )
 
@@ -71,8 +71,42 @@ pipeline {
                     }'''
 
                     server.upload(spec: uploadSpec)
+                }
+            }
+        }
 
-                    echo '<--------------- Jar Publish Ended --------------->'
+        /* ===================== NEW STAGES ===================== */
+
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker Image'
+                sh """
+                  docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                """
+            }
+        }
+
+        stage('Docker Tag') {
+            steps {
+                echo 'Tagging Docker Image'
+                sh """
+                  docker tag ${IMAGE_NAME}:${IMAGE_TAG} \
+                  ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
+                """
+            }
+        }
+
+        stage('Docker Push to JFrog') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'jfrog',
+                    usernameVariable: 'JF_USER',
+                    passwordVariable: 'JF_PASS'
+                )]) {
+                    sh """
+                      docker login ${REGISTRY} -u $JF_USER -p $JF_PASS
+                      docker push ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
+                    """
                 }
             }
         }
