@@ -49,31 +49,54 @@ pipeline {
             }
         }
 
+        // stage('Jar Publish') {
+        //     steps {
+        //         script {
+        //             echo '<--------------- Checking target folder --------------->'
+        //             sh 'ls -l target'
+
+        //             def server = Artifactory.newServer(
+        //                 url: "https://${REGISTRY}/artifactory",
+        //                 credentialsId: "jfrog"
+        //             )
+
+        //             def uploadSpec = '''{
+        //                 "files": [
+        //                     {
+        //                         "pattern": "target/*.jar",
+        //                         "target": "spring-boot-libs-release-local/",
+        //                         "flat": true
+        //                     }
+        //                 ]
+        //             }'''
+
+        //             server.upload(spec: uploadSpec)
+        //         }
+        //     }
+        // }
         stage('Jar Publish') {
-            steps {
-                script {
-                    echo '<--------------- Checking target folder --------------->'
-                    sh 'ls -l target'
+    steps {
+        script {
+            echo '<--------------- Checking target folder --------------->'
+            sh 'ls -l target'
 
-                    def server = Artifactory.newServer(
-                        url: "https://${REGISTRY}/artifactory",
-                        credentialsId: "jfrog"
-                    )
+            def server = Artifactory.server('jfrog-server')
 
-                    def uploadSpec = '''{
-                        "files": [
-                            {
-                                "pattern": "target/*.jar",
-                                "target": "spring-boot-libs-release-local/",
-                                "flat": true
-                            }
-                        ]
-                    }'''
-
-                    server.upload(spec: uploadSpec)
+            def uploadSpec = '''{
+              "files": [
+                {
+                  "pattern": "target/*.jar",
+                  "target": "spring-boot-libs-release-local/",
+                  "flat": true
                 }
-            }
+              ]
+            }'''
+
+            server.upload(uploadSpec)
         }
+    }
+}
+
 
     //     /* ===================== NEW STAGES ===================== */
 
