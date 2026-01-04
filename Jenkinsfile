@@ -6,6 +6,9 @@ pipeline {
     }
 
     environment {
+        EKS_CLUSTER   = 'sb-eks-cluster'
+        K8S_NAMESPACE = 'sb-demo'
+        APP_NAME      = 'sb-demo'
         REGISTRY = "trial6lqv76.jfrog.io"
         DOCKER_REPO = "docker-sb-docker-local"
         IMAGE_NAME = "sb-demo"
