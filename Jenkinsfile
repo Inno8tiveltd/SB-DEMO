@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        REGISTRY = "trialdshkbv.jfrog.io"
+        REGISTRY = "trial6lqv76.jfrog.io"
         DOCKER_REPO = "docker-sb-docker-local"
         IMAGE_NAME = "sb-demo"
         IMAGE_TAG = "1.0"
@@ -48,54 +48,54 @@ pipeline {
                 }
             }
         }
-
-        // stage('Jar Publish') {
-        //     steps {
-        //         script {
-        //             echo '<--------------- Checking target folder --------------->'
-        //             sh 'ls -l target'
-
-        //             def server = Artifactory.newServer(
-        //                 url: "https://${REGISTRY}/artifactory",
-        //                 credentialsId: "jfrog"
-        //             )
-
-        //             def uploadSpec = '''{
-        //                 "files": [
-        //                     {
-        //                         "pattern": "target/*.jar",
-        //                         "target": "spring-boot-libs-release-local/",
-        //                         "flat": true
-        //                     }
-        //                 ]
-        //             }'''
-
-        //             server.upload(spec: uploadSpec)
-        //         }
-        //     }
-        // }
+        
         stage('Jar Publish') {
-    steps {
-        script {
-            echo '<--------------- Checking target folder --------------->'
-            sh 'ls -l target'
+            steps {
+                script {
+                    echo '<--------------- Checking target folder --------------->'
+                    sh 'ls -l target'
 
-            def server = Artifactory.server('jfrog-server')
+                    def server = Artifactory.newServer(
+                        url: "https://${REGISTRY}/artifactory",
+                        credentialsId: "jfrog"
+                    )
 
-            def uploadSpec = '''{
-              "files": [
-                {
-                  "pattern": "target/*.jar",
-                  "target": "spring-boot-libs-release-local/",
-                  "flat": true
+                    def uploadSpec = '''{
+                        "files": [
+                            {
+                                "pattern": "target/*.jar",
+                                "target": "spring-boot-libs-release-local/",
+                                "flat": true
+                            }
+                        ]
+                    }'''
+
+                    server.upload(spec: uploadSpec)
                 }
-              ]
-            }'''
-
-            server.upload(uploadSpec)
+            }
         }
-    }
-}
+//         stage('Jar Publish') {
+//     steps {
+//         script {
+//             echo '<--------------- Checking target folder --------------->'
+//             sh 'ls -l target'
+
+//             def server = Artifactory.server('jfrog-server')
+
+//             def uploadSpec = '''{
+//               "files": [
+//                 {
+//                   "pattern": "target/*.jar",
+//                   "target": "spring-boot-libs-release-local/",
+//                   "flat": true
+//                 }
+//               ]
+//             }'''
+
+//             server.upload(uploadSpec)
+//         }
+//     }
+// }
 
 
     //     /* ===================== NEW STAGES ===================== */
