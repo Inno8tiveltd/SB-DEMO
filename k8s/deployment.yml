@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sb-demo
+  namespace: sb-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sb-demo
+  template:
+    metadata:
+      labels:
+        app: sb-demo
+    spec:
+      imagePullSecrets:
+        - name: jfrog-regcred
+      containers:
+        - name: sb-demo
+          image: trial6lqv76.jfrog.io/sb-demo/sb-demo:IMAGE_TAG
+          ports:
+            - containerPort: 8080

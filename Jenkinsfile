@@ -133,6 +133,14 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to EKS') {
+            steps {
+                sh """
+                sed -i 's|IMAGE_TAG|${IMAGE_TAG}|g' k8s/deployment.yaml
+                kubectl apply -f k8s/ -n ${K8S_NAMESPACE}
+                """
+            }
+        }
     }
 }
 
