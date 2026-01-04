@@ -137,18 +137,13 @@ pipeline {
             }
         }
         stage('Deploy to EKS') {
-    steps {
-        sh """
-        aws eks update-kubeconfig \
-          --region ${AWS_REGION} \
-          --name ${EKS_CLUSTER}
-
-        kubectl apply -f k8s/namespace.yml
-        kubectl apply -n ${K8S_NAMESPACE} -f k8s/deployment.yml
-        kubectl apply -n ${K8S_NAMESPACE} -f k8s/service.yml
-        """
-    }
-}
+            steps {
+                sh """
+                sed -i 's|IMAGE_TAG|${IMAGE_TAG}|g' k8s/deployment.yml
+                kubectl apply -f k8s/ -n ${K8S_NAMESPACE}
+                """
+            }
+        }
     }
 }
 
