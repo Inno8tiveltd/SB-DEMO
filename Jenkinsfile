@@ -119,20 +119,20 @@ pipeline {
             }
         }
 
-    //     stage('Docker Push to JFrog') {
-    //         steps {
-    //             withCredentials([usernamePassword(
-    //                 credentialsId: 'jfrog',
-    //                 usernameVariable: 'JF_USER',
-    //                 passwordVariable: 'JF_PASS'
-    //             )]) {
-    //                 sh """
-    //                   docker login ${REGISTRY} -u $JF_USER -p $JF_PASS
-    //                   docker push ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
-    //                 """
-    //             }
-    //         }
-    //     }
-    // }
+        stage('Docker Push to JFrog') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'jfrog',
+                    usernameVariable: 'JF_USER',
+                    passwordVariable: 'JF_PASS'
+                )]) {
+                    sh """
+                      docker login ${REGISTRY} -u $JF_USER -p $JF_PASS
+                      docker push ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
+                    """
+                }
+            }
+        }
+    }
 }
-}
+
