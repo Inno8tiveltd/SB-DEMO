@@ -48,7 +48,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Jar Publish') {
             steps {
                 script {
@@ -100,39 +100,39 @@ pipeline {
 
     //     /* ===================== NEW STAGES ===================== */
 
-    //     stage('Docker Build') {
-    //         steps {
-    //             echo 'Building Docker Image'
-    //             sh """
-    //               docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-    //             """
-    //         }
-    //     }
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker Image'
+                sh """
+                  docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                """
+            }
+        }
 
-    //     stage('Docker Tag') {
-    //         steps {
-    //             echo 'Tagging Docker Image'
-    //             sh """
-    //               docker tag ${IMAGE_NAME}:${IMAGE_TAG} \
-    //               ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
-    //             """
-    //         }
-    //     }
+        stage('Docker Tag') {
+            steps {
+                echo 'Tagging Docker Image'
+                sh """
+                  docker tag ${IMAGE_NAME}:${IMAGE_TAG} \
+                  ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
+                """
+            }
+        }
 
-    //     stage('Docker Push to JFrog') {
-    //         steps {
-    //             withCredentials([usernamePassword(
-    //                 credentialsId: 'jfrog',
-    //                 usernameVariable: 'JF_USER',
-    //                 passwordVariable: 'JF_PASS'
-    //             )]) {
-    //                 sh """
-    //                   docker login ${REGISTRY} -u $JF_USER -p $JF_PASS
-    //                   docker push ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
-    //                 """
-    //             }
-    //         }
-    //     }
-    // }
+        stage('Docker Push to JFrog') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'jfrog',
+                    usernameVariable: 'JF_USER',
+                    passwordVariable: 'JF_PASS'
+                )]) {
+                    sh """
+                      docker login ${REGISTRY} -u $JF_USER -p $JF_PASS
+                      docker push ${REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
+                    """
+                }
+            }
+        }
+    }
 }
 }
