@@ -148,7 +148,7 @@ pipeline {
         // }
 
         stage('Deploy (Helm)') {
-      agent { label 'maven' }
+      agent any
       environment {
         IMAGE_TAG = "${env.BUILD_NUMBER}"    // fallback - but overwritten below
       }
