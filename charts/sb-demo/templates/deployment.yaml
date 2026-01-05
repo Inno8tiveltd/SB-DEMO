@@ -3,8 +3,10 @@ kind: Deployment
 metadata:
   name: sb-demo
   namespace: sb-demo
+  labels:
+    app: sb-demo
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: sb-demo
@@ -14,9 +16,10 @@ spec:
         app: sb-demo
     spec:
       imagePullSecrets:
-        - name: jfrog-regcred
+{{- toYaml .Values.imagePullSecrets | nindent 8 }}
       containers:
         - name: sb-demo
-          image: trial6lqv76.jfrog.io/docker-sb-docker-local/sb-demo:IMAGE_TAG
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080

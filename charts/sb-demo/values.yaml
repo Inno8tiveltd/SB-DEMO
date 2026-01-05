@@ -1,0 +1,14 @@
+replicaCount: 2
+
+image:
+  repository: trial6lqv76.jfrog.io/docker-sb-docker-local/sb-demo
+  tag: "1.0"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: jfrog-regcred
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
