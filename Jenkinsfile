@@ -148,7 +148,7 @@ pipeline {
         // }
 
         stage('Deploy (Helm)') {
-      agent { label 'eks-agent' }
+      agent { label 'maven' }
       environment {
         IMAGE_TAG = "${env.BUILD_NUMBER}"    // fallback - but overwritten below
       }
@@ -184,6 +184,6 @@ pipeline {
       }
     }
     }
-    
+
 }
 
